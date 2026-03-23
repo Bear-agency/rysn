@@ -14,7 +14,10 @@ const config: Config = {
         surface: "rgb(var(--rgb-surface) / <alpha-value>)",
         elevated: "rgb(var(--rgb-elevated) / <alpha-value>)",
         fg: "rgb(var(--rgb-fg) / <alpha-value>)",
+        "fg-secondary": "rgb(var(--rgb-fg-secondary) / <alpha-value>)",
+        "fg-muted": "rgb(var(--rgb-fg-muted) / <alpha-value>)",
         borderline: "rgb(var(--rgb-borderline) / <alpha-value>)",
+        inputborder: "rgb(var(--rgb-input-border) / <alpha-value>)",
         accent: "#22D3EE",
         "accent-bright": "#E8F4FF",
         "on-accent": "#0A0A0F",
@@ -28,6 +31,9 @@ const config: Config = {
           "linear-gradient(rgba(34, 211, 238, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.06) 1px, transparent 1px)",
         "gradient-radial-fade":
           "radial-gradient(ellipse 80% 60% at 50% 0%, rgb(var(--rgb-accent-glow) / 0.45), transparent 65%)",
+        /* Warm paper: default radial was too faint at ~0.45 × low layer opacity */
+        "gradient-radial-fade-hero-light":
+          "radial-gradient(ellipse 82% 62% at 50% 0%, rgb(var(--rgb-accent-glow) / 0.68), transparent 68%)",
       },
       backgroundSize: {
         grid: "48px 48px",

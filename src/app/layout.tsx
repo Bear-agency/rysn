@@ -21,7 +21,7 @@ const siteUrl = "https://rysndigital.com";
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f4f6fb" },
+    { media: "(prefers-color-scheme: light)", color: "#E4DFD4" },
     { media: "(prefers-color-scheme: dark)", color: "#0A0A0F" },
   ],
   width: "device-width",
@@ -75,7 +75,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${syne.variable} ${dmSans.variable} min-h-screen font-sans`}
       >

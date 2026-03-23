@@ -75,29 +75,35 @@ function ServiceCard({ icon, title, items, idAttr, index }: ServiceCardProps) {
       whileInView="visible"
       viewport={{ once: true, margin: "-12%" }}
       whileHover={{ y: -6, transition: { duration: 0.35, ease: EASE_OUT } }}
-      className={`group relative overflow-hidden rounded-3xl border border-borderline/[0.09] bg-surface/80 p-7 shadow-card backdrop-blur-md transition-shadow duration-300 hover:border-accent/25 hover:shadow-card-hover dark:border-white/[0.07] dark:bg-surface/55 sm:p-8 ${
+      className={`group relative flex h-full flex-col rounded-3xl border border-borderline/[0.09] bg-surface/80 p-7 shadow-card backdrop-blur-md transition-shadow duration-300 hover:border-accent/25 hover:shadow-card-hover dark:border-white/[0.07] dark:bg-surface/55 sm:p-8 ${
         idAttr ? "scroll-mt-28" : ""
       }`}
     >
-      <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent opacity-80" />
-      <div className="pointer-events-none absolute -right-20 -top-20 h-40 w-40 rounded-full bg-accent/[0.06] blur-3xl transition-opacity duration-500 group-hover:opacity-100 dark:bg-accent/10" />
-      <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-        <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.08] via-transparent to-transparent dark:from-accent/[0.12]" />
+      {/* Clip only decorations so titles / index digits aren’t cut (overflow-hidden on whole card clipped descenders) */}
+      <div
+        className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl"
+        aria-hidden
+      >
+        <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent opacity-80" />
+        <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-accent/[0.06] blur-3xl transition-opacity duration-500 group-hover:opacity-100 dark:bg-accent/10" />
+        <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+          <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.08] via-transparent to-transparent dark:from-accent/[0.12]" />
+        </div>
       </div>
-      <span className="absolute right-6 top-6 font-display text-4xl font-bold tabular-nums text-fg/[0.06] transition-colors duration-300 group-hover:text-accent/20 dark:text-white/[0.04] dark:group-hover:text-accent/15">
+      <span className="pointer-events-none absolute right-5 top-5 z-[1] block origin-top-right pb-1 pl-2 font-display text-4xl font-bold leading-none tabular-nums text-fg/[0.18] transition-colors duration-300 group-hover:text-accent/35 dark:text-white/[0.14] dark:group-hover:text-accent/30 sm:right-6 sm:top-6">
         {num}
       </span>
-      <div className="relative">
-        <div className="mb-6 flex items-start gap-4">
+      <div className="relative z-[2] flex min-h-0 flex-1 flex-col">
+        <div className="mb-6 flex flex-col items-start gap-3 lg:min-h-[12rem]">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-borderline/[0.1] bg-gradient-to-br from-accent/12 to-accent/5 shadow-inner-glow transition-all duration-300 group-hover:border-accent/30 group-hover:shadow-glow-sm dark:border-white/[0.08] dark:from-accent/20 dark:to-transparent">
             {icon}
           </div>
-          <h3 className="pt-1 font-display text-lg font-bold leading-snug tracking-tight text-fg sm:text-xl">
+          <h3 className="w-full font-display text-lg font-bold leading-normal tracking-tight text-fg sm:text-xl sm:leading-relaxed">
             {title}
           </h3>
         </div>
         <motion.ul
-          className="space-y-2.5 text-sm leading-relaxed text-fg/62"
+          className="space-y-2.5 text-sm leading-relaxed text-fg-secondary dark:text-fg-secondary/62"
           variants={listVariants}
           initial="hidden"
           whileInView="visible"
@@ -106,7 +112,7 @@ function ServiceCard({ icon, title, items, idAttr, index }: ServiceCardProps) {
           {items.map((text) => (
             <motion.li key={text} variants={rowVariants} className="flex gap-3">
               <span
-                className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-to-br from-accent to-cyan-400 shadow-sm"
+                className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-to-br from-accent to-teal-500 shadow-sm dark:to-cyan-400"
                 aria-hidden
               />
               <span>{text}</span>
@@ -139,12 +145,12 @@ export function Services() {
             What we do
           </p>
           <h2 className="heading-section mt-6">Services built as systems</h2>
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-fg/58 sm:text-lg">
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-fg-secondary dark:text-fg-secondary/58 sm:text-lg">
             Full-funnel execution across acquisition, automation, and strategy —
             orchestrated for sustainable growth.
           </p>
         </div>
-        <div className="grid gap-7 lg:grid-cols-3 lg:gap-8">
+        <div className="grid gap-7 lg:grid-cols-3 lg:items-stretch lg:gap-8">
           <ServiceCard
             index={0}
             icon={<IconMegaphone />}

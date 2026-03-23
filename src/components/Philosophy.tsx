@@ -65,7 +65,7 @@ export function Philosophy() {
             Why RYSN
           </p>
           <h2 className="heading-section mt-6">Philosophy</h2>
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-fg/58 sm:text-lg">
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-fg-secondary dark:text-fg-secondary/58 sm:text-lg">
             A European-minded approach: precise, accountable, and built for the
             long arc — not vanity metrics.
           </p>
@@ -88,7 +88,7 @@ export function Philosophy() {
                   {p.icon}
                 </div>
                 <h3 className="font-display text-lg font-bold leading-snug text-fg sm:text-xl">{p.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-fg/58 sm:text-base">{p.body}</p>
+                <p className="mt-3 text-sm leading-relaxed text-fg-secondary dark:text-fg-secondary/58 sm:text-base">{p.body}</p>
               </div>
             </motion.div>
           ))}

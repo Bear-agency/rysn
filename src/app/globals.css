@@ -3,26 +3,36 @@
 @tailwind utilities;
 
 :root {
-  --rgb-canvas: 244 246 251;
-  --rgb-surface: 255 255 255;
-  --rgb-elevated: 241 245 249;
-  --rgb-fg: 15 23 42;
-  --rgb-borderline: 15 23 42;
-  --rgb-accent-glow: 6 182 212;
-  --shadow-inner: inset 0 1px 0 0 rgb(15 23 42 / 0.05);
-  --shadow-glow: 0 0 50px -10px rgba(6, 182, 212, 0.28);
-  --shadow-glow-sm: 0 0 28px -8px rgba(6, 182, 212, 0.18);
-  --shadow-card: 0 4px 24px -4px rgb(15 23 42 / 0.06), 0 0 0 1px rgb(15 23 42 / 0.04);
-  --shadow-card-hover: 0 12px 40px -12px rgb(6 182 212 / 0.2), 0 0 0 1px rgb(6 182 212 / 0.12);
-  --shadow-ring: 0 0 0 1px rgb(6 182 212 / 0.15);
+  color-scheme: light;
+  /* Warm paper — muted parchment, avoids white header pills / frosted UI */
+  --rgb-canvas: 228 223 212;
+  --rgb-surface: 220 215 204;
+  --rgb-elevated: 208 203 191;
+  --rgb-fg: 26 24 20;
+  --rgb-fg-secondary: 74 70 64;
+  --rgb-fg-muted: 122 117 112;
+  --rgb-borderline: 196 191 182;
+  --rgb-input-border: 180 175 166;
+  --rgb-accent-glow: 44 128 138;
+  --shadow-inner: inset 0 1px 0 0 rgb(26 24 20 / 0.045);
+  --shadow-glow: 0 0 56px -14px rgb(44 118 128 / 0.09);
+  --shadow-glow-sm: 0 0 30px -10px rgb(44 118 128 / 0.065);
+  --shadow-card: 0 2px 20px -2px rgb(26 24 20 / 0.04), 0 0 0 1px rgb(26 24 20 / 0.06);
+  --shadow-card-hover: 0 12px 36px -12px rgb(44 118 128 / 0.075), 0 0 0 1px rgb(44 118 128 / 0.08);
+  --shadow-ring: 0 0 0 1px rgb(44 118 128 / 0.085);
 }
 
 .dark {
+  color-scheme: dark;
   --rgb-canvas: 10 10 15;
   --rgb-surface: 18 18 26;
   --rgb-elevated: 24 24 31;
   --rgb-fg: 248 250 252;
+  /* Same base as fg so `dark:text-fg-secondary/58` etc. matches prior `text-fg/58` hierarchy */
+  --rgb-fg-secondary: 248 250 252;
+  --rgb-fg-muted: 248 250 252;
   --rgb-borderline: 255 255 255;
+  --rgb-input-border: 255 255 255;
   --rgb-accent-glow: 34 211 238;
   --shadow-inner: inset 0 1px 0 0 rgb(255 255 255 / 0.05);
   --shadow-glow: 0 0 56px -12px rgba(34, 211, 238, 0.38);
@@ -33,12 +43,15 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* auto works better with scroll-snap than smooth (avoids fighting the snap) */
+  scroll-behavior: auto;
+  scroll-snap-type: y mandatory;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+    scroll-snap-type: none;
   }
 
   .animate-grid-drift {
@@ -47,15 +60,23 @@ html {
 }
 
 body {
-  @apply bg-canvas text-fg/90 antialiased;
+  @apply bg-canvas text-fg/85 antialiased dark:text-fg/90;
+  transition:
+    background-color 0.45s ease,
+    color 0.35s ease;
+}
+
+a[href] {
+  cursor: pointer;
 }
 
 ::selection {
-  background-color: rgb(34 211 238 / 0.2);
+  background-color: rgb(44 118 128 / 0.18);
   color: rgb(var(--rgb-fg));
 }
 
 .dark ::selection {
+  background-color: rgb(34 211 238 / 0.22);
   color: rgb(255 255 255);
 }
 
@@ -64,13 +85,24 @@ section[id] {
   scroll-margin-top: 5.5rem;
 }
 
+/* Home page: lock scroll to each block (sections + footer so legal links stay reachable) */
+main > section,
+main > footer {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+main > footer {
+  scroll-margin-top: 5.5rem;
+}
+
 .hero-grid {
   background-size: 56px 56px;
 }
 
 .hero-grid--light {
-  background-image: linear-gradient(rgb(6 182 212 / 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(6 182 212 / 0.08) 1px, transparent 1px);
+  background-image: linear-gradient(rgb(44 41 36 / 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(44 41 36 / 0.14) 1px, transparent 1px);
 }
 
 .hero-grid--dark {
@@ -80,7 +112,16 @@ section[id] {
 
 .hero-noise {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-  opacity: 0.035;
+}
+
+.hero-noise--light {
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+}
+
+.hero-noise--dark {
+  opacity: 0.055;
+  mix-blend-mode: overlay;
 }
 
 .dark .hero-noise {
@@ -99,20 +140,25 @@ section[id] {
   }
 
   .glass-header {
-    @apply border-b border-borderline/10 bg-canvas/60 backdrop-blur-2xl backdrop-saturate-150;
+    /* Ink edge: borderline matches elevated hue, so it never reads; use fg alpha like shadow-card rings */
+    @apply backdrop-blur-2xl backdrop-saturate-100 dark:backdrop-saturate-150;
+    border-bottom: 1px solid rgb(var(--rgb-fg) / 0.14);
+    background-color: rgb(var(--rgb-elevated) / 0.9);
   }
 
   .dark .glass-header {
-    @apply border-white/[0.05];
+    border-bottom-color: rgb(255 255 255 / 0.05);
     background-color: rgb(var(--rgb-canvas) / 0.35);
   }
 
   .glass-header-scrolled {
-    @apply border-b border-borderline/[0.12] bg-canvas/85 backdrop-blur-2xl backdrop-saturate-150;
+    @apply backdrop-blur-2xl backdrop-saturate-100 dark:backdrop-saturate-150;
+    border-bottom: 1px solid rgb(var(--rgb-fg) / 0.2);
+    background-color: rgb(var(--rgb-elevated) / 0.96);
   }
 
   .dark .glass-header-scrolled {
-    @apply border-white/[0.07];
+    border-bottom-color: rgb(255 255 255 / 0.07);
     background-color: rgb(var(--rgb-canvas) / 0.72);
   }
 
@@ -121,11 +167,16 @@ section[id] {
   }
 
   .eyebrow {
-    @apply inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/[0.07] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-cyan-700 shadow-sm dark:border-accent/25 dark:bg-accent/10 dark:text-accent;
+    @apply inline-flex items-center gap-2 rounded-full border border-accent/15 bg-accent/[0.045] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-teal-800/75 shadow-sm dark:border-accent/25 dark:bg-accent/10 dark:text-accent;
   }
 
   .eyebrow-dot {
-    @apply h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_10px_rgba(34,211,238,0.6)];
+    @apply h-1.5 w-1.5 rounded-full bg-teal-600/75 dark:bg-accent;
+    box-shadow: 0 0 10px rgb(44 118 128 / 0.28);
+  }
+
+  .dark .eyebrow-dot {
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.55);
   }
 
   .heading-section {
@@ -133,7 +184,7 @@ section[id] {
   }
 
   .text-gradient-hero {
-    @apply bg-gradient-to-br from-cyan-600 via-accent to-sky-500 bg-clip-text text-transparent dark:from-accent dark:via-cyan-200 dark:to-sky-300;
+    @apply bg-gradient-to-br from-teal-700 via-teal-600 to-teal-700 bg-clip-text text-transparent dark:from-accent dark:via-cyan-200 dark:to-sky-300;
   }
 
   .btn-primary {
@@ -142,13 +193,13 @@ section[id] {
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold backdrop-blur-sm transition-all duration-300;
-    border: 1px solid rgb(var(--rgb-borderline) / 0.12);
-    background-color: rgb(var(--rgb-fg) / 0.02);
+    border: 1px solid rgb(var(--rgb-input-border) / 0.85);
+    background-color: rgb(var(--rgb-surface) / 0.65);
     color: rgb(var(--rgb-fg));
   }
 
   .btn-secondary:hover {
-    border-color: rgb(34 211 238 / 0.4);
+    border-color: rgb(52 128 138 / 0.32);
     background-color: rgb(var(--rgb-fg) / 0.05);
   }
 
@@ -162,4 +213,14 @@ section[id] {
     border-color: rgb(34 211 238 / 0.35);
     background-color: rgb(255 255 255 / 0.07);
   }
+}
+
+/* Muted primary in light — electric cyan reads harsh on warm paper */
+html:not(.dark) .btn-primary {
+  background-color: rgb(50 136 146);
+  color: rgb(252 252 250);
+}
+
+html:not(.dark) .btn-primary:hover {
+  background-color: rgb(56 144 154);
 }
